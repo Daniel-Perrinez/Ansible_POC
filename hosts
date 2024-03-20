@@ -1,0 +1,13 @@
+<!-- --- WARNING DO NOT CHECK IN ANY REAL IP ADDRESSES! --- -->
+[AWS_Harbor]
+192.168.10.1
+[AWS_Harbor:vars]
+ansible_user=root
+ansible_password=P@ssword123
+
+
+[VMWare_Ubuntu]
+192.168.10.2
+[VMWare_Ubuntu:vars]
+ansible_user=root
+ansible_password=P@ssword123
