@@ -1,0 +1,8 @@
+--- 
+  - name: ansible_play
+    hosts: VMWare_Ubuntu
+    tasks:
+      - name: ansible_task
+        yum: #Use module to run command
+          name: nano
+          state: latest
