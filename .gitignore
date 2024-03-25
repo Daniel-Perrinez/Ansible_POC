@@ -1,0 +1,13 @@
+# Local .terraform directories
+**/.terraform/*
+
+# Ignore all .tfstate files
+*.tfstate
+*.tfstate.*
+
+# We need to commit .tfstate files for: Ansible_POC/AWS_RHEL_Remote_Backend
+# Exclude the specific directory and its .tfstate files
+!Ansible_POC/AWS_RHEL_Remote_Backend/*.tfstate
+!Ansible_POC/AWS_RHEL_Remote_Backend/*.tfstate.*
+
+.DS_Store
