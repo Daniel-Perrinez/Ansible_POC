@@ -13,3 +13,6 @@ https://www.youtube.com/watch?v=1id6ERvfozo
 1. Deploy an EC2 instance for terraform.
 
 
+### SSH
+chmod 400 "pem/rhel_.pem"
+ssh -i "pem/rhel_.pem" ec2-user@10.123.1.69
