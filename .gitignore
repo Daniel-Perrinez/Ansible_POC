@@ -7,6 +7,8 @@
 *.tfstate.*
 
 # Ignore all .pem files
+rhel-key
+*.pub
 *.pem
 
 # We need to commit .tfstate files for: Ansible_POC/AWS_RHEL_Remote_Backend
