@@ -1,0 +1,39 @@
+--- 
+  - name: ansible_play
+    hosts: VMWare_RHEL_8_4
+    connection: local
+    tasks:
+      # - name: ansible_task
+      #   yum: #Use module to run command
+      #     name: nano
+      #     state: latest
+    - name: Update all installed packages using YUM module
+      yum:
+        name: '*'
+        state: latest
+        update_cache: yes
+        update_only: yes
+        use_backend: yum
+      become: true
+      register: yum_update_status
+
+    # - name: Yum install epel-release
+    #   yum:
+    #     name: 'epel-release'
+    #     state: latest
+    #     update_cache: yes
+    #     update_only: yes
+    #     use_backend: yum
+    #   become: true
+    #   register: yum_update_status
+
+    - name: Setup RHEL
+      shell: |
+        ls -la
+      register: command_output
+      
+    - name: Display the output
+      debug:
+        msg: "{{ command_output.stdout_lines }}"
+
+

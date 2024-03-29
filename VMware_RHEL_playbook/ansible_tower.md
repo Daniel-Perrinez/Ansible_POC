@@ -1,3 +1,8 @@
+**--- Ansible Workflow ---**
+cd Ansible_POC/VMware_RHEL_playbook
+ansible-playbook -i inventory.yaml ansible_tower_install.yaml --limit VMWare_RHEL_8_4
+
+
 
 # [Ansible Automation Platform Quick Installation Guide v3.8.6](https://docs.ansible.com/ansible-tower/latest/html/quickinstall/index.html)
 
