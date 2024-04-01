@@ -1,3 +1,7 @@
+# Ignore working ansible files
+VMware_RHEL_playbook/ansible.cfg
+VMware_RHEL_playbook/inventory.yaml
+
 # Local .terraform directories
 **/.terraform/*
 *.terraform.*

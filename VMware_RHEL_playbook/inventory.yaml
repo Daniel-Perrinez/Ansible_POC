@@ -1,21 +1,15 @@
 # <!-- --- WARNING DO NOT CHECK IN ANY REAL IP ADDRESSES! --- -->
-# [AWS_Harbor]
-# 192.168.0.1
-# [AWS_Harbor:vars]
-# ansible_user=<un>
-# ansible_password=<pw>
-
-
-# [VMWare_Ubuntu]
-# 192.168.0.1
-# [VMWare_Ubuntu:vars]
-# ansible_user=<un>
-# ansible_password=<pw>
-
-
 [VMWare_RHEL_8_4]
-192.168.0.1
+10.225.130.202 
 [VMWare_RHEL_8_4:vars]
 ansible_user=<un> 
 ansible_become_pass=<pw>
-ask_become_pass=<pw>
+ask-_become_pass=<pw>
+
+# Will not be able to get an IP address until you register RHEL
+[VMWare_RHEL_9_3]
+10.225.130.202 
+[VMWare_RHEL_8_4:vars]
+ansible_user=ansible 
+ansible_become_pass=VMware1!
+ask-_become_pass=VMware1!

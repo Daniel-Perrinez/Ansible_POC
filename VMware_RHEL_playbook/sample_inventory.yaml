@@ -1,0 +1,7 @@
+# <!-- --- WARNING DO NOT CHECK IN ANY REAL IP ADDRESSES! --- -->
+[VMWare_RHEL_8_4]
+10.225.130.209
+[VMWare_RHEL_8_4:vars]
+ansible_user=<un> 
+ansible_become_pass=<pw>
+ask-_become_pass=<pw>
