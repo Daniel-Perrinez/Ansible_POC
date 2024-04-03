@@ -1,44 +1,28 @@
 --- 
   - name: ansible_play
-    hosts: VMWare_RHEL_8_4
+    hosts: VMWare_RHEL_9_3
     connection: local
 
     tasks:
-      - name: Update all packages using yum
-        shell: yum -y update
-        become: true
+      # - name: Update all packages using yum
+      #   shell: yum -y update
+      #   become: true
       
-      - name: Setup RHEL
+      - name: Check nameservers
         shell: |
-          ls -la
-        register: command_output
+          cat /etc/resolv.conf  > /dev/null
+        register: result
+
+      - name: Test Echo
+        shell: |
+          echo "------- wow -------"  > /dev/null
+        # shell: |
+        #   hostnamectl set-hostname RHEL_9.3_Ansible_Tower_04_02_2024
+        register: result
+        # become: true
       
       - name: Display the output
         debug:
-          msg: "{{ command_output.stdout_lines }}"
+          msg: "{{ result.stdout_lines }}"
           
-      # - name: ansible_task
-      #   yum: #Use module to run command
-      #     name: nano
-      #     state: latest
-
-    # - name: Update all installed packages using YUM module
-    #   yum:
-    #     name: '*'
-    #     state: latest
-    #     update_cache: yes
-    #     update_only: yes
-    #     use_backend: yum
-    #   become: true
-
-    # - name: Yum install epel-release
-    #   yum:
-    #     name: 'epel-release'
-    #     state: latest
-    #     update_cache: yes
-    #     update_only: yes
-    #     use_backend: yum
-    #   become: true
-    #   register: yum_update_status
-
 

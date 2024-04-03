@@ -1,10 +1,22 @@
 **--- VMWare Setup ---**
-0. nano /etc/resolv.conf
-1. 
+0. Deploy RHEL_9.3 instance
+1. Check what version of ansible you are running:
+```
+ansible --version
+ansible [core 2.16.2]
+  config file = None
+  configured module search path = ['/Users/danielperrinez/.ansible/plugins/modules', '/usr/share/ansible/plugins/modules']
+  ansible python module location = /opt/homebrew/Cellar/ansible/9.1.0/libexec/lib/python3.12/site-packages/ansible
+  ansible collection location = /Users/danielperrinez/.ansible/collections:/usr/share/ansible/collections
+  executable location = /opt/homebrew/bin/ansible
+  python version = 3.12.1 (main, Dec  7 2023, 20:45:44) [Clang 15.0.0 (clang-1500.0.40.1)] (/opt/homebrew/Cellar/ansible/9.1.0/libexec/bin/python)
+  jinja version = 3.1.3
+  libyaml = True
+```
 
 **--- Ansible Workflow ---**
 cd Ansible_POC/VMware_RHEL_playbook
-ansible-playbook -i inventory.yaml ansible_tower_install.yaml --limit VMWare_RHEL_8_4
+ansible-playbook -i inventory.yaml ansible_tower_install.yaml --limit VMWare_RHEL_9_3 -vvvv
 
 # [Ansible Automation Platform Quick Installation Guide v3.8.6](https://docs.ansible.com/ansible-tower/latest/html/quickinstall/index.html)
 
