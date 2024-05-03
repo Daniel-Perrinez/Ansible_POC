@@ -1,0 +1,13 @@
+Shadd Gallegos
+2:33 PM
+https://docs.ansible.com/ansible/latest/collections/community/general/redhat_subscription_module.html
+Shadd Gallegos
+2:49 PM
+
+
+subscription-manager attach --pool=`subscription-manager list --available --matches 'Red Hat Satellite Infrastructure Subscription' --pool-only`
+
+Hover over a message to pin it
+keep
+
+wyv-hcih-dnq
