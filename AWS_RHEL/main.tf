@@ -6,18 +6,17 @@ provider "aws" {
 }
 
 locals {
-  name   = "Ansible_Host_RHEL"
+  project = "rhel_poc"
   region = var.aws_region
 
   tags = {
-    Example    = local.name
+    Project = local.project
   }
 }
 
 resource "aws_key_pair" "rhel-key" {
   key_name   = "rhel-key"
-  public_key = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCj3q6gUWM08re48q3XUf9CXWnz3SZ5WzeLvl2SbLvtHqfOyvnJViLchcxvVczYCABxTY79lRQ/ihF2atC5f15I2cFl54L0k6MjPO7qqBVrIS/zhbnaihunvgQNVbDl+zgyf8laoloAxxB/1B82GtEmVJYRICQxoYEZKq3PNg48TRDb7KidzkBDqSkyQZ0JxOLlaBfjdrFnbNj7gmmrkI/w6qq8GxzVz4y6tQKmcnJF24rrCtutcM2hHPbIgFcXNFFlnE0B1A0PNQtyAKcXb/ISgZTEgDpzDtsHqbF2+oMiEG8BqMyRev5cYPWuPEBplZQrdkZUStIO8LsoqkrWvjmD danielperrinez@Operators-MacBook-Pro.local
-"
+  public_key = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCj3q6gUWM08re48q3XUf9CXWnz3SZ5WzeLvl2SbLvtHqfOyvnJViLchcxvVczYCABxTY79lRQ/ihF2atC5f15I2cFl54L0k6MjPO7qqBVrIS/zhbnaihunvgQNVbDl+zgyf8laoloAxxB/1B82GtEmVJYRICQxoYEZKq3PNg48TRDb7KidzkBDqSkyQZ0JxOLlaBfjdrFnbNj7gmmrkI/w6qq8GxzVz4y6tQKmcnJF24rrCtutcM2hHPbIgFcXNFFlnE0B1A0PNQtyAKcXb/ISgZTEgDpzDtsHqbF2+oMiEG8BqMyRev5cYPWuPEBplZQrdkZUStIO8LsoqkrWvjmD danielperrinez@Operators-MacBook-Pro.local"
 }
 
 resource "tls_private_key" "rhel-rsa" {
@@ -38,9 +37,7 @@ resource "aws_instance" "RHEL_9_ec2" {
   key_name      = "rhel-key"
   vpc_security_group_ids = [ aws_security_group.ssh_sg.id ]
 
-  tags = {
-    Name = local.name
-  }
+  tags = local.tags
 }
 
 resource "aws_security_group" "ssh_sg" {
@@ -50,12 +47,48 @@ resource "aws_security_group" "ssh_sg" {
   vpc_id = aws_vpc.rhel_vpc.id
 
   # Ingress rule for SSH (port 22)
-  ingress {
-    from_port   = 22
-    to_port     = 22
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
+  # Allow IPv4 ICMP Echo Request
+ingress                = [
+  {
+      cidr_blocks      = [
+          "0.0.0.0/0",
+        ]
+      description      = ""
+      from_port        = 8
+      ipv6_cidr_blocks = []
+      prefix_list_ids  = []
+      protocol         = "icmp"
+      security_groups  = []
+      self             = false
+      to_port          = -1
+    },
+  {
+      cidr_blocks      = [
+          "0.0.0.0/0",
+        ]
+      description      = "Allow IPv4 ICMP Echo Request"
+      from_port        = 8
+      ipv6_cidr_blocks = []
+      prefix_list_ids  = []
+      protocol         = "icmp"
+      security_groups  = []
+      self             = false
+      to_port          = 0
+    },
+  {
+      cidr_blocks      = [
+          "0.0.0.0/0",
+        ]
+      description      = "Allow ssh"
+      from_port        = 22
+      ipv6_cidr_blocks = []
+      prefix_list_ids  = []
+      protocol         = "tcp"
+      security_groups  = []
+      self             = false
+      to_port          = 22
+    },
+  ]
 
   # Egress rule allowing all outbound traffic
   egress {
@@ -65,9 +98,7 @@ resource "aws_security_group" "ssh_sg" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
-  tags = {
-    Name = "rhel_poc"
-  }
+  tags = local.tags
 }
 
 # Create a VPC
@@ -76,9 +107,7 @@ resource "aws_vpc" "rhel_vpc" {
   enable_dns_support = true
   enable_dns_hostnames = true
 
-  tags = {
-    Name = "rhel_poc"
-  }
+  tags = local.tags
 }
 
 # Create a subnet within the VPC
@@ -89,7 +118,15 @@ resource "aws_subnet" "rhel_subnet" {
   map_public_ip_on_launch = true
   availability_zone = "us-east-1a"
 
+  tags = local.tags
+}
+
+
+resource "aws_internet_gateway" "Ansible_igw" {
+  vpc_id = aws_vpc.rhel_vpc.id
+
   tags = {
-    Name = "rhel_poc"
+    Name = "ansible_igw"
+    Project = local.project
   }
 }
