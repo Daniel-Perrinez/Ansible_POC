@@ -13,13 +13,19 @@ Section 1: "What is Ansible, what is it good for?"
 
 Section 2: "What will we go over?"
 -----------
-Beginner, Intermediate, and Advanced uses cases of Ansible automation.
+ - Beginner, Intermediate, and Advanced uses cases of Ansible automation.
 
-Section 2:
+Section 3: "Beginner"
 -----------
+- 1st-beginner_playbook.yml
+- Scenario:
+    
+Section 4: "Intermediate"
+-----------
+- 2nd-intermediate_playbook.yml
+- Scenario:
 
-Section 3:
+Section 5: "Advanced"
 -----------
-
-Section 4:
------------
+- 3rd-advanced_playbook.yml
+- Scenario:
