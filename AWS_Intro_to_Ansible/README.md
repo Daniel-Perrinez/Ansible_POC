@@ -14,8 +14,6 @@ Step 1: Connect to AWS
 
     chmod 400 /Users/danielperrinez/Desktop/WEI/Presentations/DevOps-for-SysOps/Ansible/Ansible_POC/creds/id_rsa.pem
 
-    //test
-    ssh -i /path/to/your-key-pair-name.pem ec2-user@your-instance-public-ip-or-dns
     ```
 
 - 2. Setup Terraform environment
@@ -24,6 +22,10 @@ Step 1: Connect to AWS
     terraform init
     terraform plan
     terraform apply
+
+    //test ssh connection
+    ping 44.211.30.96
+    ssh -i ../../../creds/id_rsa ec2-user@44.211.30.96
     ```
 
 - 3. Startup and Deploy Ansible playbook
