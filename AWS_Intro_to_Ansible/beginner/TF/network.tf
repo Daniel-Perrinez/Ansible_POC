@@ -24,7 +24,7 @@ resource "aws_security_group" "allow_ssh" {
   vpc_id      = aws_vpc.main.id
 
   ingress {
-    description = "SSH from VPC"
+    description = "SSH from anywhere"
     from_port   = 22
     to_port     = 22
     protocol    = "tcp"
@@ -41,4 +41,9 @@ resource "aws_security_group" "allow_ssh" {
   tags = merge(local.tags,
     { Name = "main-sg" }
   )
+}
+
+resource "aws_key_pair" "ansible_ssh_key" {
+  key_name   = "ansible-ssh-key"
+  public_key = file("../../../creds/id_rsa.pub")
 }
