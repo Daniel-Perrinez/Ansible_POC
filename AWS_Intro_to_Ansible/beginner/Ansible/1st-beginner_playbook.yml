@@ -1,18 +1,9 @@
 ---
-# - name: Check Connectivity and Report
-#   hosts: aws_us_east_1
-#   tasks:
-#     - name: Test Connectivity
-#       ansible.builtin.ping:
-#       register: connectivity
-#       ignore_unreachable: true
-
-#     - name: Show result
-#       ansible.builtin.debug:
-#         msg: "{{ inventory_hostname }} is {{ 'reachable' if connectivity is success else 'unreachable' }}"
-
 - name: Add new service account
   hosts: aws_us_east_1
+
+  vars:
+    new_username: "new-user-1"
 
   tasks:
     - name: List current users
@@ -20,10 +11,29 @@
       ansible.builtin.shell: |
           set -o pipefail
           getent passwd | awk -F: '$3 >= 1000 && $3 < 65534 {print $1}'
-      register: my_output # <- Registers the command output.
+      register: linux_users # <- Registers the command output.
       # https://ansible.readthedocs.io/projects/lint/rules/no-changed-when/#correct-code
-      changed_when: my_output.rc != 0 # <- Uses the return code to define when the task has changed.
+      changed_when: linux_users.rc != 0 # <- Uses the return code to define when the task has changed.
 
-    - name: Display command output
+    - name: List current users -  command output
       ansible.builtin.debug:
-        var: my_output.stdout
+        var: linux_users.stdout
+
+    - name: Delete user if it exists
+      ansible.builtin.user:
+        name: "{{ new_username }}"
+        state: absent
+        remove: true
+      become: true
+
+    - name: Add user
+      ansible.builtin.shell: |
+          set -o pipefail
+          sudo useradd -m -s /bin/bash {{ new_username }}
+
+      register: add_user
+      changed_when: add_user.rc != 0
+
+    - name: Add user - command output
+      ansible.builtin.debug:
+        var: add_user.stdout
