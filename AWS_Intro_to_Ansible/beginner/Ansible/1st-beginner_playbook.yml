@@ -1,14 +1,29 @@
 ---
-- name: Install and configure Apache
-  hosts: webservers
-  become: yes
+# - name: Check Connectivity and Report
+#   hosts: aws_us_east_1
+#   tasks:
+#     - name: Test Connectivity
+#       ansible.builtin.ping:
+#       register: connectivity
+#       ignore_unreachable: true
+
+#     - name: Show result
+#       ansible.builtin.debug:
+#         msg: "{{ inventory_hostname }} is {{ 'reachable' if connectivity is success else 'unreachable' }}"
+
+- name: Add new service account
+  hosts: aws_us_east_1
+
   tasks:
-    - name: Install Apache
-      apt:
-        name: apache2
-        state: present
-    - name: Start Apache service
-      service:
-        name: apache2
-        state: started
-        enabled: yes
+    - name: List current users
+      # 'set pipefail' will prevent surprises
+      ansible.builtin.shell: |
+          set -o pipefail
+          getent passwd | awk -F: '$3 >= 1000 && $3 < 65534 {print $1}'
+      register: my_output # <- Registers the command output.
+      # https://ansible.readthedocs.io/projects/lint/rules/no-changed-when/#correct-code
+      changed_when: my_output.rc != 0 # <- Uses the return code to define when the task has changed.
+
+    - name: Display command output
+      ansible.builtin.debug:
+        var: my_output.stdout

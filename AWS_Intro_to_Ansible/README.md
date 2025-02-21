@@ -30,9 +30,13 @@ Step 1: Connect to AWS
 
 - 3. Startup and Deploy Ansible playbook
     ```
-    //Verify your inventory.
-    ansible-inventory -i inventory.ini --list
+    cd Ansible_POC/AWS_Intro_to_Ansible/beginner/Ansible
 
-    //Ping the myhosts group in your inventory.
-    ansible myhosts -m ping -i inventory.ini
+    //Verify your inventory.
+    ansible-inventory -i inventory.yml --list
+
+    //Run your playbook
+    ansible-playbook 1st-beginner_playbook.yml -i inventory.yml
+
+
     ```
