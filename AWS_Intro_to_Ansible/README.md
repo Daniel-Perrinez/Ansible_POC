@@ -36,6 +36,7 @@ Step 1: Connect to AWS
     ansible-inventory -i inventory.yml --list
 
     //Run your playbook
+    ansible-playbook test-connectivity_playbook.yml -i inventory.yml
     ansible-playbook 1st-beginner_playbook.yml -i inventory.yml
 
 

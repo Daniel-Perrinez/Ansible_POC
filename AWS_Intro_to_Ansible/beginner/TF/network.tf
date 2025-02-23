@@ -58,17 +58,6 @@ resource "aws_security_group_rule" "allow_ping" {
   description = "Allow ICMP ping"
 }
 
-
-# resource "aws_eip" "ansible_eip_lb" {
-#   instance = aws_instance.test-linux-vm.id
-#   domain   = "vpc"
-#   public_ip = ""
-
-#   tags = merge(local.tags,
-#     { Name = "ansible-eip-lb" }
-#   )
-# }
-
 resource "aws_internet_gateway" "ansible_gw" {
   vpc_id = aws_vpc.ansible_vpc.id
 

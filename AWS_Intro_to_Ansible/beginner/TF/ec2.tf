@@ -9,7 +9,7 @@ resource "aws_instance" "test-linux-vm" {
   associate_public_ip_address = true
 
   tags = merge(local.tags,
-    { Name = "Linux Box" }
+    { Name = "Beginner - Linux Box" }
   )
 }
 

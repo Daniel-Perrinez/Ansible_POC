@@ -18,14 +18,16 @@ Section 2: "What will we go over?"
 Section 3: "Beginner"
 -----------
 - 1st-beginner_playbook.yml
-- Scenario:
+- Scenario: Configure system settings (e.g., timezone, hostname, user accounts)
     
 Section 4: "Intermediate"
 -----------
 - 2nd-intermediate_playbook.yml
-- Scenario:
+- Scenario: Deploy application to staging and production environments.
 
 Section 5: "Advanced"
 -----------
 - 3rd-advanced_playbook.yml
-- Scenario:
+- Scenario: Implement disaster recovery procedures, including automated failover and recovery testing
+    - Highlight using a RedHat pre-built module
+
