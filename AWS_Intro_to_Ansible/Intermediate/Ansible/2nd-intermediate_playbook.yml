@@ -1,0 +1,39 @@
+---
+- name: Add new service account
+  hosts: aws_us_east_1
+
+  vars:
+    new_username: "new-user-1"
+
+  tasks:
+    - name: List current users
+      # 'set pipefail' will prevent surprises
+      ansible.builtin.shell: |
+          set -o pipefail
+          getent passwd | awk -F: '$3 >= 1000 && $3 < 65534 {print $1}'
+      register: linux_users # <- Registers the command output.
+      # https://ansible.readthedocs.io/projects/lint/rules/no-changed-when/#correct-code
+      changed_when: linux_users.rc != 0 # <- Uses the return code to define when the task has changed.
+
+    - name: List current users -  command output
+      ansible.builtin.debug:
+        var: linux_users.stdout
+
+    - name: Delete user if it exists
+      ansible.builtin.user:
+        name: "{{ new_username }}"
+        state: absent
+        remove: true
+      become: true
+
+    - name: Add user
+      ansible.builtin.shell: |
+          set -o pipefail
+          sudo useradd -m -s /bin/bash {{ new_username }}
+
+      register: add_user
+      changed_when: add_user.rc != 0
+
+    - name: Add user - command output
+      ansible.builtin.debug:
+        var: add_user.stdout
