@@ -1,39 +1,65 @@
 ---
-- name: Add new service account
-  hosts: aws_us_east_1
+- name: Configure Flask app
+  hosts: Dev
+  become: true
+  remote_user: ec2-user
+  gather_facts: true
 
   vars:
-    new_username: "new-user-1"
+    region: us-east-1
+    security_group: flask_sg
 
+  # tasks:
+    # - name: Deploy app to Dev
+    # - name: Update dependencies if needed
+    # - name: Test app is responsive
+
+    # - name: If Dev deployment has passed test, then deploy to staging
+    # - name: If staging passes, then Deploy app to production.
   tasks:
-    - name: List current users
-      # 'set pipefail' will prevent surprises
+    - name: Update all packages
+      ansible.builtin.dnf:
+        name: '*'
+        state: latest
+        update_only: true
+
+    - name: Install Python3 and pip
+      ansible.builtin.dnf:
+        name:
+          - python3
+          - python3-pip
+        state: present
+
+    - name: Install Flask
+      ansible.builtin.pip:
+        name: flask
+        executable: pip3
+
+    - name: Copy Flask app
+      ansible.builtin.copy:
+        src: ./app.py
+        dest: /home/ec2-user/app.py
+        mode: '0644'
+
+    - name: Install and configure Nginx
+      block:
+        - name: Install Nginx
+          ansible.builtin.dnf:
+            name: nginx
+            state: present
+
+        - name: Configure Nginx
+          ansible.builtin.template:
+            src: ./nginx.conf.j2
+            dest: /etc/nginx/nginx.conf
+          notify: Restart Nginx
+
+    - name: Start Flask app
       ansible.builtin.shell: |
-          set -o pipefail
-          getent passwd | awk -F: '$3 >= 1000 && $3 < 65534 {print $1}'
-      register: linux_users # <- Registers the command output.
-      # https://ansible.readthedocs.io/projects/lint/rules/no-changed-when/#correct-code
-      changed_when: linux_users.rc != 0 # <- Uses the return code to define when the task has changed.
+        nohup python3 /home/ec2-user/app.py > /home/ec2-user/flask.log 2>&1 &
 
-    - name: List current users -  command output
-      ansible.builtin.debug:
-        var: linux_users.stdout
-
-    - name: Delete user if it exists
-      ansible.builtin.user:
-        name: "{{ new_username }}"
-        state: absent
-        remove: true
-      become: true
-
-    - name: Add user
-      ansible.builtin.shell: |
-          set -o pipefail
-          sudo useradd -m -s /bin/bash {{ new_username }}
-
-      register: add_user
-      changed_when: add_user.rc != 0
-
-    - name: Add user - command output
-      ansible.builtin.debug:
-        var: add_user.stdout
+  handlers:
+    - name: Restart Nginx
+      ansible.builtin.service:
+        name: nginx
+        state: restarted

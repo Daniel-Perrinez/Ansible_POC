@@ -22,8 +22,8 @@ resource "aws_subnet" "ansible_public_subnet" {
 }
 
 # Create a security group
-resource "aws_security_group" "allow_ssh" {
-  name        = "allow_ssh"
+resource "aws_security_group" "flask_app_sg" {
+  name        = "flask_app_sg"
   description = "Allow SSH inbound traffic"
   vpc_id      = aws_vpc.ansible_vpc.id
 
@@ -31,6 +31,14 @@ resource "aws_security_group" "allow_ssh" {
     description = "SSH from anywhere"
     from_port   = 22
     to_port     = 22
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  ingress {
+    description = "Security for Flask app"
+    from_port   = 80
+    to_port     = 80
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
@@ -53,10 +61,21 @@ resource "aws_security_group_rule" "allow_ping" {
   to_port     = 0
   protocol    = "icmp"
   cidr_blocks = ["0.0.0.0/0"]  # Allow ping from anywhere (adjust as needed)
-  security_group_id = aws_security_group.allow_ssh.id
+  security_group_id = aws_security_group.flask_app_sg.id
 
   description = "Allow ICMP ping"
 }
+
+# resource "aws_security_group_rule" "allow_eighty" {
+#   type        = "ingress"
+#   from_port   = 80
+#   to_port     = 80
+#   protocol    = "tcp"
+#   cidr_blocks = ["0.0.0.0/0"]
+#   security_group_id = aws_security_group.flask_app_sg.id
+
+#   description = "Allow ICMP ping"
+# }
 
 resource "aws_internet_gateway" "ansible_gw" {
   vpc_id = aws_vpc.ansible_vpc.id
