@@ -23,11 +23,12 @@
         state: latest
         update_only: true
 
-    - name: Install Python3 and pip
+    - name: Install Python3, pip, and git
       ansible.builtin.dnf:
         name:
           - python3
           - python3-pip
+          - git
         state: present
 
     - name: Install Flask
@@ -35,11 +36,20 @@
         name: flask
         executable: pip3
 
-    - name: Copy Flask app
-      ansible.builtin.copy:
-        src: ./app.py
-        dest: /home/ec2-user/app.py
-        mode: '0644'
+    # - name: Copy Flask app
+    #   ansible.builtin.copy:
+    #     src: ./app.py
+    #     dest: /home/ec2-user/app.py
+    #     mode: '0644'
+
+    - name: Clone GitHub repository
+      ansible.builtin.git:
+        repo: https://github.com/Daniel-Perrinez/Dockerized_Flask_Website.git
+        dest: /home/ec2-user/flask_app
+        version: main
+        clone: true
+        update: true
+
 
     - name: Install and configure Nginx
       block:
@@ -54,10 +64,11 @@
             dest: /etc/nginx/nginx.conf
           notify: Restart Nginx
 
+    # The "nohup" command, short for "no hang up," is meant to run processes that continue executing after the user logs out or the terminal session ends.
     - name: Start Flask app
       ansible.builtin.shell: |
-        nohup python3 /home/ec2-user/app.py > /home/ec2-user/flask.log 2>&1 &
-
+        nohup python3 /home/ec2-user/flask_app/app.py > /home/ec2-user/flask.log 2>&1 &
+  
   handlers:
     - name: Restart Nginx
       ansible.builtin.service:

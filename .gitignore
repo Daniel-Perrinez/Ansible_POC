@@ -14,6 +14,7 @@ VMware_RHEL_playbook/inventory.yaml
 rhel-key
 *.pub
 *.pem
+*id_rsa
 
 # We need to commit .tfstate files for: Ansible_POC/AWS_RHEL_Remote_Backend
 # Exclude the specific directory and its .tfstate files
