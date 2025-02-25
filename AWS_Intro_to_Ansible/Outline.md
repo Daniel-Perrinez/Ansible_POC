@@ -24,6 +24,13 @@ Section 4: "Intermediate"
 -----------
 - 2nd-intermediate_playbook.yml
 - Scenario: Deploy application to staging and production environments.
+<!-- Check nginx -->
+nginx -t
+sudo systemctl restart nginx
+
+ps aux | grep nginx
+
+
 
 Section 5: "Advanced"
 -----------
