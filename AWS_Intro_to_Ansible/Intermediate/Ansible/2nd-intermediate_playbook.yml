@@ -31,9 +31,13 @@
           - git
         state: present
 
-    - name: Install Flask
+    - name: Install Python modules
       ansible.builtin.pip:
-        name: flask
+        name:
+          - flask
+          - gunicorn
+          # Nginx can’t communicate directly with Flask app. 
+          # It can’t execute the application. We need WSGI server to communicate between server and flask app.
         executable: pip3
 
     - name: Clone GitHub repository
@@ -57,39 +61,36 @@
             state: directory
             mode: '0755'
 
-        - name: Copy flask_app config
+        - name: Copy nginx sites-available config
           ansible.builtin.copy:
-            src: config_files/flask_app
-            dest: /etc/nginx/sites-available/default
+            src: config_files/flask_app_sites-available
+            dest: /etc/nginx/sites-available/app
             mode: '0644'
             force: true
 
-        - name: Ensure sites-available directory exists
-          ansible.builtin.file:
-            path: /etc/nginx/sites-enabled
-            state: directory
-            mode: '0755'
-
-        # - name: Copy flask_app config
-        #   ansible.builtin.copy:
-        #     src: config_files/flask_app
-        #     dest: /etc/nginx/sites-enabled/default
-        #     mode: '0644'
-        #     force: true
-
-        - name: Copy flask_app config
+        - name: Copy nginx.conf
           ansible.builtin.copy:
             src: config_files/nginx.conf
             dest: /etc/nginx/nginx.conf
             mode: '0644'
             force: true
 
+        - name: Copy flaskapp.service config
+          ansible.builtin.copy:
+            src: config_files/flaskapp.service
+            dest: /etc/systemd/system/flaskapp.service
+            mode: '0644'
+            force: true
+
+# If service not already stated ... 
+  # sudo nano /etc/systemd/system/flaskapp.service
+
 # sudo nano /etc/nginx/sites-available/flask_app
 
     # The "nohup" command, short for "no hang up," is meant to run processes that continue executing after the user logs out or the terminal session ends.
-    - name: Start Flask app
-      ansible.builtin.shell: |
-        nohup python3 /home/ec2-user/flask_app/app.py > /home/ec2-user/flask.log 2>&1 &
+    # - name: Start Flask app
+    #   ansible.builtin.shell: |
+    #     nohup python3 /home/ec2-user/flask_app/app.py > /home/ec2-user/flask.log 2>&1 &
 
   handlers:
     - name: Restart Nginx
