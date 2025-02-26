@@ -16,7 +16,7 @@
 
     # - name: If Dev deployment has passed test, then deploy to staging
     # - name: If staging passes, then Deploy app to production.
-    
+
   tasks:
     - name: Update all packages
       ansible.builtin.dnf:
@@ -44,7 +44,7 @@
     - name: Clone GitHub repository
       ansible.builtin.git:
         repo: https://github.com/Daniel-Perrinez/Ansible_POC.git
-        dest: /home/ec2-user/Ansible_POC/AWS_Intro_to_Ansible/Intermediate/Flask_app
+        dest: /home/ec2-user/Ansible_POC
         version: main
         clone: true
         update: true
@@ -84,9 +84,9 @@
     #         force: true
 
     # The "nohup" command, short for "no hang up," is meant to run processes that continue executing after the user logs out or the terminal session ends.
-    # - name: Start Flask app
-    #   ansible.builtin.shell: |
-    #     nohup python3 /home/ec2-user/flask_app/app.py > /home/ec2-user/flask.log 2>&1 &
+    - name: Start Flask app
+      ansible.builtin.shell: |
+        nohup python3 /home/ec2-user/Ansible_POC/AWS_Intro_to_Ansible/Intermediate/Flask_app/flask_app.py > /home/ec2-user/flask.log 2>&1 &
 
   # handlers:
   #   - name: Restart Nginx
