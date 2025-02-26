@@ -1,0 +1,12 @@
+---
+- name: Check Connectivity and Report
+  hosts: all
+  tasks:
+    - name: Test Connectivity
+      ansible.builtin.ping:
+      register: connectivity
+      ignore_unreachable: true
+
+    - name: Show result
+      ansible.builtin.debug:
+        msg: "{{ inventory_hostname }} is {{ 'reachable' if connectivity is success else 'unreachable' }}"

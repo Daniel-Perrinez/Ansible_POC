@@ -1,8 +1,0 @@
-server { 
- listen 80; 
- server_name 10.0.1.183; 
- 
- location / { 
- proxy_pass http://unix:/home/ec2-user/flask_app/flaskapp.sock; 
- } 
-}
