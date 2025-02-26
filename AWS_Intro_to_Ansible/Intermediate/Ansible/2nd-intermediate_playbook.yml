@@ -16,6 +16,7 @@
 
     # - name: If Dev deployment has passed test, then deploy to staging
     # - name: If staging passes, then Deploy app to production.
+    
   tasks:
     - name: Update all packages
       ansible.builtin.dnf:
