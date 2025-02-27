@@ -29,7 +29,7 @@ variable "resource_specific_tags" {
   description = "Additional tags to be merged with common tags"
   type        = map(string)
   default = {
-    "IaC_Files" = "Ansible_POC/AWS_Intro_to_Ansible/beginner/TF" #TODO: would like to make this a dynamic value based on the file which defines the resource.
+    "IaC_Files" = "Ansible_POC/AWS_Intro_to_Ansible/advanced/TF" #TODO: would like to make this a dynamic value based on the file which defines the resource.
   }
 }
 

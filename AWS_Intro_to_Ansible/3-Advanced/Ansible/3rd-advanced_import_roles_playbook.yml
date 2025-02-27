@@ -1,0 +1,39 @@
+---
+- name: Deploy Flask App Role
+  hosts: Prod
+  roles:
+    - cloud.aws_ops.deploy_flask_app
+  vars:
+    deploy_flask_app_workers_instance_type: "t2.micro"
+    deploy_flask_app_workers_user_name: "ec2-user"
+
+    # variables to create new hosts and groups in inventory of in memory playbook.
+    deploy_flask_app_private_subnet_id: "subnet-071862d42427e533f"
+    deploy_flask_app_vpc_id: "vpc-09ba814d1e6aa7d0f"
+    deploy_flask_app_rds_host: "database-1.cri8mqoksb58.us-east-1.rds.amazonaws.com"
+    deploy_flask_app_rds_dbname: "database-1"
+    deploy_flask_app_rds_master_username: "postgres"
+    deploy_flask_app_rds_master_password: "12345678"
+
+    # variables needed for the deployment
+      # bastion host
+    deploy_flask_app_bastion_host_username: "ec2-user"
+    deploy_flask_app_bastion_instance_id: "i-0aef57f5686c1c80b"
+    deploy_flask_app_bastion_ssh_private_key_path: "creds/id_rsa"
+    deploy_flask_app_number_of_workers: 1
+      # app
+    deploy_flask_app_listening_port: 80
+    deploy_flask_app_force_init: false
+    deploy_flask_app_config:
+      env: Prod
+      admin_user: ec2-user
+      admin_password: 12345678
+      app_dir: Flask_app
+
+  tasks:
+  - name: Install Python modules
+    ansible.builtin.pip:
+      name:
+        - botocore
+        - botocore3
+      executable: pip3
