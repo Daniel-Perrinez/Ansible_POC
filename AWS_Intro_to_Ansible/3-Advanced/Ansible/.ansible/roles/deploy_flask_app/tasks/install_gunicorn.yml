@@ -6,6 +6,7 @@
         name:
           - gunicorn
         executable: pip3
+      become: true
 
     - name: Install Podman
       ansible.builtin.dnf:
