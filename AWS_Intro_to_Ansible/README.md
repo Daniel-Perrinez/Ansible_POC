@@ -57,9 +57,11 @@ https://developers.redhat.com/articles/2023/08/17/how-deploy-flask-application-p
 
 cd Ansible_POC/AWS_Intro_to_Ansible/3-Advanced/Flask_app
 gunicorn --config ../Ansible/config_files/gunicorn_config.py flask_app:app
+curl 0.0.0.0:8080/
 curl 34.229.132.203:8080/
 
 podman build -t flask_pod:1.0.0 .
+podman run -it --rm -p 8080:8080 flask_pod:1.0.0
 
 
 ps aux | grep python3
