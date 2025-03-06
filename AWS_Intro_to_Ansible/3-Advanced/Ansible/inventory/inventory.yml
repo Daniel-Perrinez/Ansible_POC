@@ -7,7 +7,7 @@ Dev:
 
 Prod:
   hosts:
-    34.229.132.203:
+    44.192.33.44:
       ansible_user: ec2-user
       ansible_ssh_private_key_file: ../../../creds/id_rsa
       # ansible_password: 123

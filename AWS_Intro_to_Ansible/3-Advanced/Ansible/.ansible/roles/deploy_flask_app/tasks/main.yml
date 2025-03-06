@@ -35,19 +35,19 @@
         # It can’t execute the application.
         # We need WSGI server (Gunicorn) to communicate between server and flask app.
 
-    - name: Install nginx
-      ansible.builtin.include_tasks: install_nginx.yml
+    # - name: Install nginx
+    #   ansible.builtin.include_tasks: install_nginx.yml
 
-    - name: Check if Flask process is running
-      ansible.builtin.shell: |
-        pgrep -f "python3 /home/ec2-user/Ansible_POC/AWS_Intro_to_Ansible/2-Intermediate/Flask_app/flask_app.py"
-      register: flask_process # <- Registers the command output.
-      ignore_errors: true
-      changed_when: false # Explicitly say task never changes system state, which is appropriate for a command that only retrieves information.
+    # - name: Check if Flask process is running
+    #   ansible.builtin.shell: |
+    #     pgrep -f "python3 /home/ec2-user/Ansible_POC/AWS_Intro_to_Ansible/2-Intermediate/Flask_app/flask_app.py"
+    #   register: flask_process # <- Registers the command output.
+    #   ignore_errors: true
+    #   changed_when: false # Explicitly say task never changes system state, which is appropriate for a command that only retrieves information.
 
-    - name: Display Flask status
-      ansible.builtin.debug:
-        msg: "( {{ flask_process.stdout }} ' - ' {{ flask_process.rc }} ) Flask is {{ 'running' if flask_process.rc == 0 else 'not running' }}"
+    # - name: Display Flask status
+    #   ansible.builtin.debug:
+    #     msg: "( {{ flask_process.stdout }} ' - ' {{ flask_process.rc }} ) Flask is {{ 'running' if flask_process.rc == 0 else 'not running' }}"
 
 
     # # The "nohup" command, short for "no hang up," is meant to run processes that continue executing after the user logs out or the terminal session ends.
