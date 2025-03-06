@@ -17,4 +17,4 @@ WORKDIR /app
 EXPOSE 8080
 
 
-CMD ["gunicorn","--config", "../Ansible/config_files/gunicorn_config.py", "flask_app:app"]
+CMD ["gunicorn","--config", "gunicorn_config.py", "flask_app:app"]
