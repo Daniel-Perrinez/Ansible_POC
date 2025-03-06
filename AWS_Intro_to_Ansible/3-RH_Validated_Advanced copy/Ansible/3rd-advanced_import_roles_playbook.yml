@@ -1,0 +1,73 @@
+---
+- name: Deploy Flask App Role
+  hosts: Dev
+  environment:
+    AWS_ACCESS_KEY_ID: "{{ lookup('env', 'AWS_ACCESS_KEY_ID') }}"
+    AWS_SECRET_ACCESS_KEY: "{{ lookup('env', 'AWS_SECRET_ACCESS_KEY') }}"
+    AWS_SESSION_TOKEN: "{{ lookup('env', 'AWS_SESSION_TOKEN') }}"
+    AWS_DEFAULT_REGION: "us-east-1"
+  become: false
+  remote_user: ec2-user
+  vars:
+    aws_region: us-east-1
+    deploy_flask_app_workers_instance_type: "t2.micro"
+    deploy_flask_app_workers_user_name: "ec2-user"
+
+    # variables to create new hosts and groups in inventory of in memory playbook.
+    deploy_flask_app_private_subnet_id: "subnet-0701e3df0a1eaaa6a"
+    deploy_flask_app_vpc_id: "vpc-030b8089166959d8d"
+    deploy_flask_app_rds_host: "database-1.cri8mqoksb58.us-east-1.rds.amazonaws.com"
+    deploy_flask_app_rds_dbname: "database-1"
+    deploy_flask_app_rds_master_username: "postgres"
+    deploy_flask_app_rds_master_password: "12345678"
+
+    # variables needed for the deployment
+      # bastion host
+    deploy_flask_app_bastion_host_username: "ec2-user"
+    deploy_flask_app_bastion_instance_id: "i-090afcd32267f4445"
+    deploy_flask_app_bastion_ssh_private_key_path: "creds/id_rsa"
+    deploy_flask_app_number_of_workers: 1
+      # app
+    deploy_flask_app_listening_port: 80
+    deploy_flask_app_force_init: true
+    deploy_flask_app_config:
+      env: Prod
+      admin_user: ec2-user
+      admin_password: 12345678
+      app_dir: Flask_app
+
+  tasks:
+    - name: Install Python3, pip, and git
+      ansible.builtin.dnf:
+        name:
+          - ansible-core
+          - python3
+          - python3-pip
+          - git
+        state: present
+      become: true
+
+    - name: Install Podman
+      ansible.builtin.dnf:
+        name:
+          - podman
+        update_cache: false
+        state: present
+      become: true
+
+    - name: Install Python modules
+      ansible.builtin.pip:
+        name:
+          - boto3
+          - botocore
+          - flask
+        executable: pip3
+      become: true
+
+    - name: Include Role - cloud.aws_ops.aws_setup_credentials
+      ansible.builtin.include_role:
+        name: cloud.aws_ops.aws_setup_credentials
+
+    - name: Include Role - cloud.aws_ops.deploy_flask_app
+      ansible.builtin.include_role:
+        name: cloud.aws_ops.deploy_flask_app

@@ -1,0 +1,68 @@
+---
+- name: Deploy flask application
+  block:
+    - name: Update all packages
+      ansible.builtin.dnf:
+        name: '*'
+        state: latest
+        update_only: true
+
+    - name: Install Python3, pip, and git
+      ansible.builtin.dnf:
+        name:
+          - python3
+          - python3-pip
+          - git
+        state: present
+
+    - name: Install Python modules
+      ansible.builtin.pip:
+        name:
+          - flask
+        executable: pip3
+
+    - name: Clone GitHub repository
+      ansible.builtin.git:
+        repo: https://github.com/Daniel-Perrinez/Ansible_POC.git
+        dest: /home/ec2-user/Ansible_POC
+        version: main
+        clone: true
+        update: true
+
+    - name: Install gunicorn
+      ansible.builtin.include_tasks: install_gunicorn.yml
+        # Nginx can’t communicate directly with Flask app.
+        # It can’t execute the application.
+        # We need WSGI server (Gunicorn) to communicate between server and flask app.
+
+    - name: Install nginx
+      ansible.builtin.include_tasks: install_nginx.yml
+
+    - name: Check if Flask process is running
+      ansible.builtin.shell: |
+        pgrep -f "python3 /home/ec2-user/Ansible_POC/AWS_Intro_to_Ansible/2-Intermediate/Flask_app/flask_app.py"
+      register: flask_process # <- Registers the command output.
+      ignore_errors: true
+      changed_when: false # Explicitly say task never changes system state, which is appropriate for a command that only retrieves information.
+
+    - name: Display Flask status
+      ansible.builtin.debug:
+        msg: "( {{ flask_process.stdout }} ' - ' {{ flask_process.rc }} ) Flask is {{ 'running' if flask_process.rc == 0 else 'not running' }}"
+
+
+    # # The "nohup" command, short for "no hang up," is meant to run processes that continue executing after the user logs out or the terminal session ends.
+    # - name: Start Flask app
+    #   ansible.builtin.shell: |
+    #     nohup python3 /home/ec2-user/Ansible_POC/AWS_Intro_to_Ansible/2-Intermediate/Flask_app/flask_app.py > /home/ec2-user/flask.log 2>&1 &
+    #   when: flask_process.rc != 0
+    #   changed_when: flask_process.rc != 0 # <- Uses the return code to define when the task has changed.
+
+
+# gunicorn --config gunicorn_config.py app:app
+
+
+  # handlers:
+  #   - name: Restart Nginx
+  #     ansible.builtin.service:
+  #       name: nginx
+  #       state: restarted

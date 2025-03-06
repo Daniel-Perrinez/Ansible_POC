@@ -30,6 +30,10 @@ Step 1: Connect to AWS
 
 - 3. Startup and Deploy Ansible playbook
     ```
+    <!-- # ssh forwarding ... no need to use ssh password -->
+    eval $(ssh-agent)
+    ssh-add ../../../creds/id_rsa
+
     cd Ansible_POC/AWS_Intro_to_Ansible/beginner/Ansible
 
     //Verify your inventory.
@@ -40,7 +44,22 @@ Step 1: Connect to AWS
     ansible-playbook 1st-beginner_playbook.yml -i inventory.yml
     ```
 
-- 4. Advanced section only
+
+
+
+- 4. Advanced Flask Deployment
+Playbooks --> Roles --> Tasks
+https://docs.ansible.com/ansible/latest/playbook_guide/playbooks_reuse_roles.html
+
+<!-- Verify roles location -->
+ansible-galaxy role list 
+
+https://developers.redhat.com/articles/2023/08/17/how-deploy-flask-application-python-gunicorn#the_application
+
+
+
+
+- 4. (Validated Solution ... work in progress) Advanced section only
 Add the following to your ansible.cfg, `ansible --version` will tell you where ansible.cfg is.
 `nano ~/.ansible/plugins/modules/ansible.cfg`
 
@@ -62,10 +81,13 @@ Test connection
 
 Install the collectiions
 ```
-ansible-galaxy collection install amazon.aws
-ansible-galaxy collection install community.aws
+pipx install ansible-rulebook ansible ansible-runner
 
+ansible-galaxy collection install amazon.aws
+ansible-galaxy collection install amazon.cloud
+ansible-galaxy collection install community.aws
 ansible-galaxy collection install cloud.aws_ops
+ansible-galaxy collection install community.libvirt
 ```
 
 TF needs
@@ -78,7 +100,10 @@ TF needs
 ```
 
 ```
+-- Testing prior to launch
+aws sts get-caller-identity
 ansible-galaxy init test_role
+aws ec2 describe-instances --instance-ids i-0aef57f5686c1c80b
 
 ansible-playbook -i inventory/inventory.yml 3rd-advanced_import_roles_playbook.yml 
 ```

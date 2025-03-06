@@ -1,0 +1,34 @@
+---
+- name: Install and configure Nginx
+  block:
+    - name: Install Nginx
+      ansible.builtin.dnf:
+        name: nginx
+        state: present
+
+    #     - name: Ensure sites-available directory exists
+    #       ansible.builtin.file:
+    #         path: /etc/nginx/sites-available
+    #         state: directory
+    #         mode: '0755'
+
+    #     - name: Copy nginx sites-available config
+    #       ansible.builtin.copy:
+    #         src: config_files/flask_app_sites-available
+    #         dest: /etc/nginx/sites-available/app
+    #         mode: '0644'
+    #         force: true
+
+    #     - name: Copy nginx.conf
+    #       ansible.builtin.copy:
+    #         src: config_files/nginx.conf
+    #         dest: /etc/nginx/nginx.conf
+    #         mode: '0644'
+    #         force: true
+
+        # - name: Copy flaskapp.service config
+        #   ansible.builtin.copy:
+        #     src: config_files/flaskapp.service
+        #     dest: /etc/systemd/system/flaskapp.service
+        #     mode: '0644'
+        #     force: true

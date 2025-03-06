@@ -85,7 +85,7 @@
 
     - name: Check if Flask process is running
       ansible.builtin.shell: |
-        pgrep -f "python3 /home/ec2-user/Ansible_POC/AWS_Intro_to_Ansible/Intermediate/Flask_app/flask_app.py"
+        pgrep -f "python3 /home/ec2-user/Ansible_POC/AWS_Intro_to_Ansible/2-Intermediate/Flask_app/flask_app.py"
       register: flask_process # <- Registers the command output.
       ignore_errors: true
       changed_when: false
@@ -98,7 +98,7 @@
     # The "nohup" command, short for "no hang up," is meant to run processes that continue executing after the user logs out or the terminal session ends.
     - name: Start Flask app
       ansible.builtin.shell: |
-        nohup python3 /home/ec2-user/Ansible_POC/AWS_Intro_to_Ansible/Intermediate/Flask_app/flask_app.py > /home/ec2-user/flask.log 2>&1 &
+        nohup python3 /home/ec2-user/Ansible_POC/AWS_Intro_to_Ansible/2-Intermediate/Flask_app/flask_app.py > /home/ec2-user/flask.log 2>&1 &
       when: flask_process.rc != 0
       changed_when: flask_process.rc != 0 # <- Uses the return code to define when the task has changed.
 

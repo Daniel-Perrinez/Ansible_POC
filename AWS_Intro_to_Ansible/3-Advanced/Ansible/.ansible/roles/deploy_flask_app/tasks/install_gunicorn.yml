@@ -1,0 +1,8 @@
+---
+- name: Install gunicorn
+  block:
+    - name: Install gunicorn Python modules
+      ansible.builtin.pip:
+        name:
+          - gunicorn
+        executable: pip3

@@ -1,0 +1,4 @@
+---
+  vars:
+    region: us-east-1
+    security_group: flask_sg
