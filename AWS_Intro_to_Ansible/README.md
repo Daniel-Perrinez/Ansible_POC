@@ -53,11 +53,16 @@ https://docs.ansible.com/ansible/latest/playbook_guide/playbooks_reuse_roles.htm
 
 <!-- Verify roles location -->
 ansible-galaxy role list 
-
 https://developers.redhat.com/articles/2023/08/17/how-deploy-flask-application-python-gunicorn#the_application
 
+cd Ansible_POC/AWS_Intro_to_Ansible/3-Advanced/Flask_app
+gunicorn --config ../Ansible/config_files/gunicorn_config.py flask_app:app
+curl 34.229.132.203:8080/
+
+podman build -t flask_pod:1.0.0 .
 
 
+ps aux | grep python3
 
 - 4. (Validated Solution ... work in progress) Advanced section only
 Add the following to your ansible.cfg, `ansible --version` will tell you where ansible.cfg is.
