@@ -17,4 +17,4 @@ WORKDIR /app
 EXPOSE 80
 
 
-CMD ["gunicorn","--config", "gunicorn_config.py", "flask_app:app"]
+CMD ["gunicorn","--config", "gunicorn_config.py", "flask_app_prod:app"]
