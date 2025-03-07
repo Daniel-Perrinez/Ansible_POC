@@ -23,7 +23,7 @@
       changed_when: false
 
     - name: Force kill if process still running
-      ansible.builtin.shell: "pkill -9 -f {{ process_name }}"
+      ansible.builtin.shell: "pkill -9 -f '{{ process_name }}'"
       when: kill_check.rc == 0
 
     - name: Display process status
