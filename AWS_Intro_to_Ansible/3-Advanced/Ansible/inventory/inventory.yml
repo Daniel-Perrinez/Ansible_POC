@@ -5,6 +5,7 @@ Dev:
       ansible_user: ec2-user
       ansible_ssh_private_key_file: ../../../creds/id_rsa
       deploy_flask_app_build_path: "Ansible_POC/AWS_Intro_to_Ansible/3-Advanced/Flask_app"
+      process_name: "python3 flask_app_dev.py"
       # ansible_password: 123
 
 Prod:

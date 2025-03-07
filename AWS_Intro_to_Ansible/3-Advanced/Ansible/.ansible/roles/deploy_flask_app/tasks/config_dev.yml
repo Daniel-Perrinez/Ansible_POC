@@ -5,23 +5,47 @@
       ansible.builtin.debug:
         msg: "Configure Dev Envirionment"
 
-    - name: Check if Flask process is running
-      ansible.builtin.shell: |
-        pgrep -f "python3 flask_app_dev.py"
-      register: flask_process # <- Registers the command output.
+# --------------------------------------------------------------------------------------------------------------------------------------------------------
+    - name: Check if process is running
+      ansible.builtin.shell: "pgrep -f '{{ process_name }}'"
+      register: process_check # <- Registers the command output.
       ignore_errors: true
       changed_when: false # Explicitly say task never changes system state, which is appropriate for a command that only retrieves information.
 
-    - name: Display Flask status
-      ansible.builtin.debug:
-        msg: "( {{ flask_process.stdout }} ' - ' {{ flask_process.rc }} ) Flask is {{ 'running' if flask_process.rc == 0 else 'not running' }}"
+    - name: Kill process
+      ansible.builtin.shell: "pkill -f {{ process_name }}"
+      when: process_check.rc == 0
 
+    - name: Confirm process is killed
+      ansible.builtin.shell: "pgrep -f '{{ process_name }}'"
+      register: kill_check
+      ignore_errors: true
+      changed_when: false
+
+    - name: Force kill if process still running
+      ansible.builtin.shell: "pkill -9 -f {{ process_name }}"
+      when: kill_check.rc == 0
+
+    - name: Display process status
+      ansible.builtin.debug:
+        msg: "( {{ process_check.stdout }} ' - ' {{ process_check.rc }} ) {{ process_name }} is {{ 'running' if process_check.rc == 0 else 'not running' }}"
 
     # The "nohup" command, short for "no hang up," is meant to run processes that continue executing after the user logs out or the terminal session ends.
-    - name: Start Flask app
+    - name: Start process
       ansible.builtin.shell:
         chdir: "{{ deploy_flask_app_build_path }}"
-        cmd:  nohup python3 flask_app_dev.py > /home/ec2-user/flask.log 2>&1 &
-      when: flask_process.rc != 0
-      changed_when: flask_process.rc != 0 # <- Uses the return code to define when the task has changed.
+        cmd:  nohup {{ process_name }} > /home/ec2-user/flask.log 2>&1 &
+      when: process_check.rc != 0
+      changed_when: process_check.rc != 0 # <- Uses the return code to define when the task has changed.
       become: true
+
+    - name: Check if process is running
+      ansible.builtin.shell: "pgrep -f '{{ process_name }}'"
+      register: process_check
+      ignore_errors: true
+      changed_when: false
+
+    - name: Display process status
+      ansible.builtin.debug:
+        msg: "( {{ process_check.stdout }} ' - ' {{ process_check.rc }} ) {{ process_name }} is {{ 'running' if process_check.rc == 0 else 'not running' }}"
+# --------------------------------------------------------------------------------------------------------------------------------------------------------
