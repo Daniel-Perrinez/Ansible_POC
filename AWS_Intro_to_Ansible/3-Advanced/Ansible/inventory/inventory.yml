@@ -17,4 +17,5 @@ Prod:
       deploy_flask_app_image_name: "flask_pod"
       deploy_flask_app_image_tag: "1.0.0"
       deploy_flask_app_build_path: "Ansible_POC/AWS_Intro_to_Ansible/3-Advanced/Flask_app"
+      process_name: "/usr/local/bin/gunicorn --config gunicorn_config.py --bind 0.0.0.0:80 flask_app_prod:app"
       # ansible_password: 123

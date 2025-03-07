@@ -49,24 +49,29 @@
       when: check_image.rc == 1
 
 # -------------------------------------------------------------------------------------------------------------------
+    - name: Deploy proccess
+      ansible.builtin.include_tasks: deploy_process.yml
+      when: check_image.rc == 0
 
-    - name: Check if Gunicorn process is running
-      ansible.builtin.shell: |
-        pgrep -f "/usr/local/bin/gunicorn --config gunicorn_config.py --bind 0.0.0.0:80 flask_app_prod:app"
-      register: gunicorn_process
-      ignore_errors: true
-      changed_when: false
 
-    - name: Display Gunicorn status
-      ansible.builtin.debug:
-        msg: "( {{ gunicorn_process.stdout }} ' - ' {{ gunicorn_process.rc }} ) Gunicorn is {{ 'running' if gunicorn_process.rc == 0 else 'not running' }}"
 
-    - name: Start Gunicorn Flask app
-      ansible.builtin.shell: 
-        chdir: "{{ deploy_flask_app_build_path }}"
-        cmd: nohup /usr/local/bin/gunicorn --config gunicorn_config.py --bind 0.0.0.0:80 flask_app_prod:app > /home/ec2-user/flask.log 2>&1 &
-      when: gunicorn_process.rc != 0
-      changed_when: gunicorn_process.rc != 0 # <- Uses the return code to define when the task has changed.  
+    # - name: Check if Gunicorn process is running
+    #   ansible.builtin.shell: |
+    #     pgrep -f "/usr/local/bin/gunicorn --config gunicorn_config.py --bind 0.0.0.0:80 flask_app_prod:app"
+    #   register: gunicorn_process
+    #   ignore_errors: true
+    #   changed_when: false
+
+    # - name: Display Gunicorn status
+    #   ansible.builtin.debug:
+    #     msg: "( {{ gunicorn_process.stdout }} ' - ' {{ gunicorn_process.rc }} ) Gunicorn is {{ 'running' if gunicorn_process.rc == 0 else 'not running' }}"
+
+    # - name: Start Gunicorn Flask app
+    #   ansible.builtin.shell: 
+    #     chdir: "{{ deploy_flask_app_build_path }}"
+    #     cmd: nohup /usr/local/bin/gunicorn --config gunicorn_config.py --bind 0.0.0.0:80 flask_app_prod:app > /home/ec2-user/flask.log 2>&1 &
+    #   when: gunicorn_process.rc != 0
+    #   changed_when: gunicorn_process.rc != 0 # <- Uses the return code to define when the task has changed.  
 
     # - name: Install nginx
     #   ansible.builtin.include_tasks: install_nginx.yml
