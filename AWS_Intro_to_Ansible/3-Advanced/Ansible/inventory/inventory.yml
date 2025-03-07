@@ -1,13 +1,19 @@
 Dev:
   hosts:
     34.229.132.203:
+      envirionment: Dev
       ansible_user: ec2-user
       ansible_ssh_private_key_file: ../../../creds/id_rsa
+      deploy_flask_app_build_path: "Ansible_POC/AWS_Intro_to_Ansible/3-Advanced/Flask_app"
       # ansible_password: 123
 
 Prod:
   hosts:
-    44.192.33.44:
+    3.227.240.148:
+      envirionment: Prod
       ansible_user: ec2-user
       ansible_ssh_private_key_file: ../../../creds/id_rsa
+      deploy_flask_app_image_name: "flask_pod"
+      deploy_flask_app_image_tag: "1.0.0"
+      deploy_flask_app_build_path: "Ansible_POC/AWS_Intro_to_Ansible/3-Advanced/Flask_app"
       # ansible_password: 123

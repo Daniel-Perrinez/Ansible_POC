@@ -18,7 +18,7 @@ resource "aws_instance" "dev-linux-vm" {
 }
 
 resource "aws_instance" "prod-linux-vm" {
-  ami                    = "ami-06b21ccaeff8cd686" # Amazon Linux 2 AMI
+  ami                    = "ami-0c7af5fe939f2677f"
   instance_type          = "t2.micro"
   subnet_id              = aws_subnet.ansible_public_subnet.id
   vpc_security_group_ids = [aws_security_group.flask_app_sg.id]

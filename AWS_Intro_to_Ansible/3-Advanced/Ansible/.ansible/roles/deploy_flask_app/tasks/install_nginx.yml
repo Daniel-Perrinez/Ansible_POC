@@ -32,3 +32,11 @@
         #     dest: /etc/systemd/system/flaskapp.service
         #     mode: '0644'
         #     force: true
+
+
+
+  # handlers:
+  #   - name: Restart Nginx
+  #     ansible.builtin.service:
+  #       name: nginx
+  #       state: restarted
