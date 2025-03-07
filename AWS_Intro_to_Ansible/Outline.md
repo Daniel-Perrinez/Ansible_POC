@@ -5,7 +5,7 @@ Title: “DevOps for SysOps (part 3): Introduction to Ansible”
 Section 0: "What will we go over?"
 -----------
  1. What is Ansible, 
- 2. The Structure of ansible
+ 2. The Structure of Ansible
  3. Beginner
  4. Intermediate
  5. Advanced uses cases of Ansible automation.

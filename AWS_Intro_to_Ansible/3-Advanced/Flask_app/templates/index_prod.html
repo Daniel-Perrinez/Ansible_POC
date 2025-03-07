@@ -8,6 +8,7 @@
 <body>
     <h1>PROD</h1>
     <img src="{{ url_for('static', filename='WEI.png') }}" alt="Description">
+    <h2>Dedication meets innovation.</h1>
     <br>
     <form action="greet" method="post">
         {% for message in get_flashed_messages() %}
