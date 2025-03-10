@@ -1,0 +1,30 @@
+---
+- name: Build container
+  block:
+    - name: Build the container image
+      containers.podman.podman_image:
+        name: "{{ deploy_flask_app_image_name }}:{{ deploy_flask_app_image_tag }}"
+        path: "{{ deploy_flask_app_build_path }}"
+        state: build
+
+    - name: Check if the container image exists
+      ansible.builtin.command:
+        cmd: "podman image exists {{ deploy_flask_app_image_name }}:{{ deploy_flask_app_image_tag }}"
+      register: check_image
+      failed_when: check_image.rc not in [0, 1]  # Ensure only exit codes 0 (exists) and 1 (doesn't exist) are valid
+
+
+
+
+# Combine these
+    - name: Display result if the image exists
+      ansible.builtin.debug:
+        msg: "The container image {{ deploy_flask_app_image_name }}:{{ deploy_flask_app_image_tag }} exists."
+      when: check_image.rc == 0
+
+    - name: Display result if the image does not exist
+      ansible.builtin.debug:
+        msg: "The container image {{ deploy_flask_app_image_name }}:{{ deploy_flask_app_image_tag }} does not exist."
+      when: check_image.rc == 1
+
+# Need to return a value when the image is ready

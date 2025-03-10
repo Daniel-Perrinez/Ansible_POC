@@ -8,18 +8,18 @@
       changed_when: false # Explicitly say task never changes system state, which is appropriate for a command that only retrieves information.
 
     - name: Kill process
-      ansible.builtin.shell: "pkill -f {{ process_name }}"
+      ansible.builtin.shell: "pkill -f '{{ process_name }}'"
       when: process_check.rc == 0
 
     - name: Confirm process is killed
       ansible.builtin.shell: "pgrep -f '{{ process_name }}'"
-      register: kill_check
+      register: process_check
       ignore_errors: true
       changed_when: false
 
     - name: Force kill if process still running
-      ansible.builtin.shell: "pkill -9 -f \"{{ process_name }}\""
-      when: kill_check.rc == 0
+      ansible.builtin.shell: "pkill -9 -f '{{ process_name }}'"
+      when: process_check.rc == 0
 
     - name: Display process status
       ansible.builtin.debug:

@@ -1,6 +1,7 @@
 ---
 - name: Add new service account
-  hosts: Dev, Prod
+  # hosts: Dev, Prod
+  hosts: Prod
   become: true
   remote_user: ec2-user
   gather_facts: true
