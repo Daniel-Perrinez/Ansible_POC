@@ -1,30 +1,27 @@
 ---
-- name: Build container
+- name: (tasks/build_container.yml) - Build container
   block:
-    - name: Build the container image
+    - name: (tasks/build_container.yml) - Build the container image
       containers.podman.podman_image:
         name: "{{ deploy_flask_app_image_name }}:{{ deploy_flask_app_image_tag }}"
         path: "{{ deploy_flask_app_build_path }}"
         state: build
 
-    - name: Check if the container image exists
+    - name: (tasks/build_container.yml) - Check if the container image exists
       ansible.builtin.command:
         cmd: "podman image exists {{ deploy_flask_app_image_name }}:{{ deploy_flask_app_image_tag }}"
       register: check_image
       failed_when: check_image.rc not in [0, 1]  # Ensure only exit codes 0 (exists) and 1 (doesn't exist) are valid
 
-
-
-
-# Combine these
-    - name: Display result if the image exists
+    - name: (tasks/build_container.yml) - Display result
       ansible.builtin.debug:
-        msg: "The container image {{ deploy_flask_app_image_name }}:{{ deploy_flask_app_image_tag }} exists."
+        msg: "The container image {{ deploy_flask_app_image_name }}:{{ deploy_flask_app_image_tag }} {{'exists.' if check_image.rc == 0 else 'does not exist.'}}"
+
+    - name: (tasks/build_container.yml) - Set image result
+      ansible.builtin.set_fact:
+        check_image_result:
+          status: "success"
+          message: "Container image available"
       when: check_image.rc == 0
-
-    - name: Display result if the image does not exist
-      ansible.builtin.debug:
-        msg: "The container image {{ deploy_flask_app_image_name }}:{{ deploy_flask_app_image_tag }} does not exist."
-      when: check_image.rc == 1
 
 # Need to return a value when the image is ready

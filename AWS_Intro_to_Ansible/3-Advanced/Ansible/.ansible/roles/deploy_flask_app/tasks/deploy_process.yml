@@ -1,32 +1,32 @@
 ---
-- name: Deploy proccess
+- name: (tasks/deploy_process.yml) - Deploy proccess
   block:
-    - name: Check if process is running
+    - name: (tasks/deploy_process.yml) - Check if process is running
       ansible.builtin.shell: "pgrep -f '{{ process_name }}'"
       register: process_check # <- Registers the command output.
       ignore_errors: true
       changed_when: false # Explicitly say task never changes system state, which is appropriate for a command that only retrieves information.
 
-    - name: Kill process
+    - name: (tasks/deploy_process.yml) - Kill process
       ansible.builtin.shell: "pkill -f '{{ process_name }}'"
       when: process_check.rc == 0
 
-    - name: Confirm process is killed
+    - name: (tasks/deploy_process.yml) - Confirm process is killed
       ansible.builtin.shell: "pgrep -f '{{ process_name }}'"
       register: process_check
       ignore_errors: true
       changed_when: false
 
-    - name: Force kill if process still running
+    - name: (tasks/deploy_process.yml) - Force kill if process still running
       ansible.builtin.shell: "pkill -9 -f '{{ process_name }}'"
       when: process_check.rc == 0
 
-    - name: Display process status
+    - name: (tasks/deploy_process.yml) - Display process status
       ansible.builtin.debug:
         msg: "( {{ process_check.stdout }} ' - ' {{ process_check.rc }} ) {{ process_name }} is {{ 'running' if process_check.rc == 0 else 'not running' }}"
 
     # The "nohup" command, short for "no hang up," is meant to run processes that continue executing after the user logs out or the terminal session ends.
-    - name: Start process
+    - name: (tasks/deploy_process.yml) - Start process
       ansible.builtin.shell:
         chdir: "{{ deploy_flask_app_build_path }}"
         cmd:  nohup {{ process_name }} > /home/ec2-user/flask.log 2>&1 &
@@ -34,12 +34,19 @@
       changed_when: process_check.rc != 0 # <- Uses the return code to define when the task has changed.
       become: true
 
-    - name: Check if process is running
+    - name: (tasks/deploy_process.yml) - Check if process is running
       ansible.builtin.shell: "pgrep -f '{{ process_name }}'"
       register: process_check
       ignore_errors: true
       changed_when: false
 
-    - name: Display process status
+    - name: (tasks/deploy_process.yml) - Display process status
       ansible.builtin.debug:
         msg: "( {{ process_check.stdout }} ' - ' {{ process_check.rc }} ) {{ process_name }} is {{ 'running' if process_check.rc == 0 else 'not running' }}"
+
+    - name: Set deployment result
+      set_fact:
+        deployment_result:
+          status: "success"
+          message: "Deployment completed successfully"
+      when: process_check.rc == 0

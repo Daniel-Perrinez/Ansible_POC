@@ -1,13 +1,13 @@
 ---
-- name: Deploy flask application
+- name: (tasks/main.yml) - Deploy flask application
   block:
-    - name: Update all packages
+    - name: (tasks/main.yml) - Update all packages
       ansible.builtin.dnf:
         name: '*'
         state: latest
         update_only: true
 
-    - name: Install Python3, pip, and git
+    - name: (tasks/main.yml) - Install Python3, pip, and git
       ansible.builtin.dnf:
         name:
           - python3
@@ -15,13 +15,13 @@
           - git
         state: present
 
-    - name: Install Python modules
+    - name: (tasks/main.yml) - Install Python modules
       ansible.builtin.pip:
         name:
           - flask
         executable: pip3
 
-    - name: Clone GitHub repository
+    - name: (tasks/main.yml) - Clone GitHub repository
       ansible.builtin.git:
         repo: https://github.com/Daniel-Perrinez/Ansible_POC.git
         dest: /home/ec2-user/Ansible_POC
@@ -29,10 +29,10 @@
         clone: true
         update: true
 
-    - name: Configure Dev Host
+    - name: (tasks/main.yml) - Configure Dev Host
       ansible.builtin.include_tasks: config_dev.yml
       when: inventory_hostname in groups['Dev']
 
-    - name: Configure Prod Host
+    - name: (tasks/main.yml) - Configure Prod Host
       ansible.builtin.include_tasks: config_prod.yml
       when: inventory_hostname in groups['Prod']

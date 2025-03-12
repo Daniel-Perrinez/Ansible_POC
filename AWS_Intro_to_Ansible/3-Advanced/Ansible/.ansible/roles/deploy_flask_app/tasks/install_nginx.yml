@@ -1,5 +1,5 @@
 ---
-- name: Install and configure Nginx
+- name: (tasks/install_nginx.yml) - Install and configure Nginx
   block:
     - name: Install Nginx
       ansible.builtin.dnf:

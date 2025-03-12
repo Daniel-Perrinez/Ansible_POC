@@ -1,11 +1,11 @@
 ---
-- name: Configure Prod Host
+- name: (tasks/config_prod.yml) - Configure Prod Host
   block:
-    - name: Echo a string
+    - name: (tasks/config_prod.yml) - Echo a string
       ansible.builtin.debug:
         msg: "Configure Prod Envirionment"
 
-    - name: Install gunicorn Python modules
+    - name: (tasks/config_prod.yml) - Install gunicorn Python modules
       ansible.builtin.pip:
         name:
           - gunicorn
@@ -17,7 +17,7 @@
         # It can’t execute the application.
         # We need WSGI server (Gunicorn) to communicate between server and flask app.
 
-    - name: Install Podman
+    - name: (tasks/config_prod.yml) - Install Podman
       ansible.builtin.dnf:
         name:
           - podman
@@ -25,13 +25,20 @@
         state: present
       become: true
 
-    - name: Build container
+    - name: (tasks/config_prod.yml) - Build container
       ansible.builtin.include_tasks: build_container.yml
-      register: image_ready
+      register: container_result
 
-    - name: Deploy proccess
+    - name: (tasks/config_prod.yml) - Deploy proccess
       ansible.builtin.include_tasks: deploy_process.yml
-      when: image_ready.rc == 0
+      when: check_image_result.status[0] == "success"
+
+    - name: (tasks/config_prod.yml) - Set config result
+      set_fact:
+        config_result:
+          status: "success"
+          message: "Config completed successfully"
+      when: deployment_result.rc == 0
 
     # - name: Install nginx
     #   ansible.builtin.include_tasks: install_nginx.yml
