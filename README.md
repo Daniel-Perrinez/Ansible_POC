@@ -25,21 +25,22 @@ ansible --version
 `
 
 ## Ansible Essential Files
-- ansible.cfg
-    <!-- try this for testing -->
-    host_key_checking=false
+    - ansible.cfg
+        <!-- try this for testing -->
+        host_key_checking=false
 
-- hosts
+    ## Hostfile
+    - inventory.yml
 
-## Ansible Configuration as Code
-Automations are organized in:
- - Playbooks (YAML)
-    - Plays
-        - Tasks
+    ## Ansible Configuration as Code
+    Automations are organized in:
+    - Playbooks (YML)
+        - Plays
+            - Tasks
 
-## YAML
-YAML == YAML Aint Markup Language
-" --- " at the top of a file denotes yaml 
+    ## YAML / YML
+    YAML == YAML Aint Markup Language
+    " --- " at the top of a file denotes yaml 
 
 
 ## POC

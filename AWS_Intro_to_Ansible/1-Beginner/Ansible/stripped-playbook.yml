@@ -1,0 +1,13 @@
+---
+- name: Add new service account
+  hosts: aws_us_east_1
+
+  vars:
+    new_username: "new-user-1"
+
+  tasks:
+    - name: Add user
+      ansible.builtin.shell: |
+          set -o pipefail
+          sudo useradd -m -s /bin/bash {{ new_username }}
+
