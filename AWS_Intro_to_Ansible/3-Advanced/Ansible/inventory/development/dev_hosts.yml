@@ -1,0 +1,4 @@
+dev:
+  hosts:
+    dev_server:
+      ansible_host: 34.229.132.203

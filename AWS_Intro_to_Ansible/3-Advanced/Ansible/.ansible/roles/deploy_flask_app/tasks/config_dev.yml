@@ -7,10 +7,3 @@
 
     - name: (tasks/config_dev.yml) - Deploy proccess
       ansible.builtin.include_tasks: deploy_process.yml
-
-    - name: (tasks/config_dev.yml) - Set config result
-      set_fact:
-        config_result:
-          status: "success"
-          message: "Config completed successfully"
-      when: deployment_result.rc == 0

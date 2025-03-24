@@ -43,10 +43,3 @@
     - name: (tasks/deploy_process.yml) - Display process status
       ansible.builtin.debug:
         msg: "( {{ process_check.stdout }} ' - ' {{ process_check.rc }} ) {{ process_name }} is {{ 'running' if process_check.rc == 0 else 'not running' }}"
-
-    - name: Set deployment result
-      set_fact:
-        deployment_result:
-          status: "success"
-          message: "Deployment completed successfully"
-      when: process_check.rc == 0

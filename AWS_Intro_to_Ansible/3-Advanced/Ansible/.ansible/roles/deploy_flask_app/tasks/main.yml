@@ -29,10 +29,5 @@
         clone: true
         update: true
 
-    - name: (tasks/main.yml) - Configure Dev Host
-      ansible.builtin.include_tasks: config_dev.yml
-      when: inventory_hostname in groups['Dev']
-
-    - name: (tasks/main.yml) - Configure Prod Host
-      ansible.builtin.include_tasks: config_prod.yml
-      when: inventory_hostname in groups['Prod']
+    - name: (tasks/main.yml) - Configure host for {{ envirionment }}
+      ansible.builtin.include_tasks: config_{{ envirionment }}.yml

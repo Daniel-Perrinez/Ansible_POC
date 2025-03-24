@@ -6,6 +6,3 @@
   gather_facts: true
   roles:
     - deploy_flask_app
-    # setting 'roles_path = .ansible/roles:' in ansible.cfg points to this roles location.
-    # Created this symlink to fix the linter.
-    # ln -s /Users/danielperrinez/Desktop/WEI/Presentations/DevOps-for-SysOps/Ansible/Ansible_POC/AWS_Intro_to_Ansible/3-Advanced/Ansible/.ansible/roles .

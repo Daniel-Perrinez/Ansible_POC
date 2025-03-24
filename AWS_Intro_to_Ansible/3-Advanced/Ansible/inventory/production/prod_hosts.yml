@@ -1,0 +1,4 @@
+prod:
+  hosts:
+    prod_server:
+      ansible_host: 3.227.240.148
