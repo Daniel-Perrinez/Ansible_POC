@@ -20,6 +20,17 @@ inventories/
          stagehost2.yml
 
 
+Setting up a Dynamic Inventory for AWS: https://docs.ansible.com/ansible/2.8/user_guide/intro_dynamic_inventory.html#inventory-script-example-aws-ec2
+
+aws sso login --profile my-profile
+
+aws ec2 describe-instances \
+    --instance-ids i-090afcd31269f4345
+
+ansible-inventory -i inventories/aws_ec2.yml --list
+ansible-inventory -i inventories/aws_ec2.yml --graph
+
+
 Step 1: Connect to AWS
 - 1. From: https://wei-eng.awsapps.com/start/#/?tab=accounts
     Grab the following values and paste them into your terminal:

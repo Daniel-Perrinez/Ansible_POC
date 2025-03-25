@@ -1,8 +1,8 @@
 ---
-- name: Add new service account
+- name: Deploy Flask app in {{ envirionment }}
   hosts: "{{ envirionment }}"
   become: true
-  remote_user: ec2-user
+  remote_user: "{{ ansible_user }}"
   gather_facts: true
   roles:
     - deploy_flask_app
