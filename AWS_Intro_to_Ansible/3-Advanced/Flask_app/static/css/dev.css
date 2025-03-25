@@ -1,6 +1,7 @@
 body {
     text-align: center;
-    background-color: #717f81;
+    /* background-color: #717f81; */
+    background-color: grey;
 }
 p {
     color: white;

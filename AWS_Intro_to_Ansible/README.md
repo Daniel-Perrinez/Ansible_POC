@@ -151,3 +151,18 @@ aws ec2 describe-instances --instance-ids i-0aef57f5686c1c80b
 
 ansible-playbook -i inventory/inventory.yml 3rd-advanced_import_roles_playbook.yml 
 ```
+
+
+Live Demo:
+```
+cd /Users/danielperrinez/Desktop/WEI/Presentations/DevOps-for-SysOps/Part 3 - Ansible/Ansible_POC/AWS_Intro_to_Ansible/3-Advanced/Ansible
+```
+<!-- Update and deploy dev app -->
+update: 3-Advanced/Flask_app/templates/index_dev.html
+
+run:
+```
+ansible-playbook -i inventories/development/aws_ec2.yml --extra-vars "@inventories/development/host_vars/dev.yml" 3rd-advanced_import_roles_playbook.yml
+```
+
+<!-- Update and deploy prod app -->
