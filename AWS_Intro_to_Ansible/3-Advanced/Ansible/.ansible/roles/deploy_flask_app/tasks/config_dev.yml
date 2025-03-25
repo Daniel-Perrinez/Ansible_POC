@@ -1,9 +1,9 @@
 ---
-- name: (tasks/config_dev.yml) - Configure Dev Host
+- name: (tasks/config_dev.yml) - Configure Dev Host --> in {{ envirionment }}
   block:
-    - name: (tasks/config_dev.yml) - Echo a string
+    - name: (tasks/config_dev.yml) - Echo a string --> in {{ envirionment }}
       ansible.builtin.debug:
         msg: "Configure Dev Envirionment"
 
-    - name: (tasks/config_dev.yml) - Deploy proccess
+    - name: (tasks/config_dev.yml) - Deploy proccess --> in {{ envirionment }}
       ansible.builtin.include_tasks: deploy_process.yml

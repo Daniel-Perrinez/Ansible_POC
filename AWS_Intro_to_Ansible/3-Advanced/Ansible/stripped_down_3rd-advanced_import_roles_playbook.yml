@@ -1,5 +1,5 @@
 ---
-- name: Deploy Flask app in {{ envirionment }}
+- name: Deploy Flask app --> in {{ envirionment }}
   hosts: "{{ envirionment }}"
   become: true
   remote_user: "{{ ansible_user }}"

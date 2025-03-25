@@ -3,4 +3,4 @@ aws_profile: Daniel-Perrinez-Sandbox
 regions:
   - us-east-1
 groups:
-  dev: "'dev' in (tags.Environment|lower)"
+  dev: "'prod' in (tags.Environment|lower)"

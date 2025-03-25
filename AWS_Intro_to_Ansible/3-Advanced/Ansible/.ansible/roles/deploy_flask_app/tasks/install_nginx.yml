@@ -1,7 +1,7 @@
 ---
-- name: (tasks/install_nginx.yml) - Install and configure Nginx
+- name: (tasks/install_nginx.yml) - Install and configure Nginx --> in {{ envirionment }}
   block:
-    - name: Install Nginx
+    - name: Install Nginx --> in {{ envirionment }}
       ansible.builtin.dnf:
         name: nginx
         state: present

@@ -21,6 +21,12 @@ inventories/
 
 
 Setting up a Dynamic Inventory for AWS: https://docs.ansible.com/ansible/2.8/user_guide/intro_dynamic_inventory.html#inventory-script-example-aws-ec2
+<!-- you may need to unset envars -->
+unset AWS_ACCESS_KEY_ID
+unset AWS_SECRET_ACCESS_KEY
+unset AWS_SESSION_TOKEN
+unset AWS_REGION
+unset AWS_OUTPUT
 
 aws sso login --profile my-profile
 
@@ -29,6 +35,8 @@ aws ec2 describe-instances \
 
 ansible-inventory -i inventories/aws_ec2.yml --list
 ansible-inventory -i inventories/aws_ec2.yml --graph
+
+
 
 
 Step 1: Connect to AWS
@@ -158,11 +166,29 @@ Live Demo:
 cd /Users/danielperrinez/Desktop/WEI/Presentations/DevOps-for-SysOps/Part 3 - Ansible/Ansible_POC/AWS_Intro_to_Ansible/3-Advanced/Ansible
 ```
 <!-- Update and deploy dev app -->
-update: 3-Advanced/Flask_app/templates/index_dev.html
+update: 
+    3-Advanced/Flask_app/templates/index_dev.html
+    3-Advanced/Flask_app/static/css/dev.css
 
 run:
 ```
-ansible-playbook -i inventories/development/aws_ec2.yml --extra-vars "@inventories/development/host_vars/dev.yml" 3rd-advanced_import_roles_playbook.yml
+ansible-inventory -i inventories/development/aws_ec2.yml --graph
+git add .
+git commit -a -m "updated dev site"
+git push origin main
+ansible-playbook -i inventories/development/aws_ec2.yml --extra-vars "@inventories/development/host_vars/dev.yml" 3rd-advanced_roles_playbook.yml
 ```
 
 <!-- Update and deploy prod app -->
+update: 
+    3-Advanced/Flask_app/templates/index_prod.html
+    3-Advanced/Flask_app/static/css/prod.css
+
+run:
+```
+ansible-inventory -i inventories/production/aws_ec2.yml --graph
+git add .
+git commit -a -m "updated prod site"
+git push origin main
+ansible-playbook -i inventories/production/aws_ec2.yml --extra-vars "@inventories/production/host_vars/prod.yml" 3rd-advanced_roles_playbook.yml
+```

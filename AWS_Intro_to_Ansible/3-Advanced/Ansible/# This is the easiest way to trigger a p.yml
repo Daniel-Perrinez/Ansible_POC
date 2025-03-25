@@ -1,2 +1,0 @@
-# This is the easiest way to trigger a play. By specifying the host/group vars
-ansible-playbook -i inventories/development/hosts.ini --extra-vars "@inventories/development/host_vars/dev.yml" 3rd-advanced_import_roles_playbook.yml
