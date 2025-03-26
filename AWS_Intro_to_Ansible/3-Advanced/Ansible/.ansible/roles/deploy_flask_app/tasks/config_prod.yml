@@ -1,23 +1,23 @@
 ---
-- name: (tasks/config_prod.yml) - Configure Prod Host --> in {{ envirionment }}
+- name: Configure Prod Host --> (tasks/config_prod.yml in {{ envirionment }})
   block:
-    - name: (tasks/config_prod.yml) - Echo a string --> in {{ envirionment }}
+    - name: Echo a string --> (tasks/config_prod.yml in {{ envirionment }})
       ansible.builtin.debug:
         msg: "Configure Prod Envirionment"
 
-    - name: (tasks/config_prod.yml) - Install gunicorn Python modules --> in {{ envirionment }}
+    - name: Install gunicorn Python modules --> (tasks/config_prod.yml in {{ envirionment }})
       ansible.builtin.pip:
-        name:
-          - gunicorn
+        name: gunicorn
         state: present
         executable: pip3
       become: true
+
       # https://developers.redhat.com/articles/2023/08/17/how-deploy-flask-application-python-gunicorn#the_application
       # Nginx can’t communicate directly with Flask app.
         # It can’t execute the application.
         # We need WSGI server (Gunicorn) to communicate between server and flask app.
 
-    - name: (tasks/config_prod.yml) - Install Podman --> in {{ envirionment }}
+    - name: Install Podman --> (tasks/config_prod.yml in {{ envirionment }})
       ansible.builtin.dnf:
         name:
           - podman
@@ -25,20 +25,14 @@
         state: present
       become: true
 
-    - name: (tasks/config_prod.yml) - Build container --> in {{ envirionment }}
+    # TODO: Add conditional "If Clone GitHub has changes"
+    - name: Build container --> (tasks/config_prod.yml in {{ envirionment }})
       ansible.builtin.include_tasks: build_container.yml
-      register: container_result
+      register: build_container_result
 
-    - name: (tasks/config_prod.yml) - Deploy proccess --> in {{ envirionment }}
+    - name: Deploy proccess --> (tasks/config_prod.yml in {{ envirionment }})
       ansible.builtin.include_tasks: deploy_process.yml
-      when: check_image_result.status[0] == "success"
-
-    # - name: (tasks/config_prod.yml) - Set config result --> in {{ envirionment }}
-    #   set_fact:
-    #     config_result:
-    #       status: "success"
-    #       message: "Config completed successfully"
-    #   when: deployment_result.rc == 0
+      when: build_container_result is succeeded
 
     # - name: Install nginx
     #   ansible.builtin.include_tasks: install_nginx.yml

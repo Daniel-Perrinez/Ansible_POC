@@ -1,13 +1,13 @@
 ---
-- name: (tasks/main.yml) - Deploy flask application --> in {{ envirionment }}
+- name: Deploy flask application --> (tasks/main.yml (tasks/main.yml in {{ envirionment }}))
   block:
-    - name: (tasks/main.yml) - Update all packages --> in {{ envirionment }}
+    - name: Update all packages --> (tasks/main.yml in {{ envirionment }})
       ansible.builtin.dnf:
         name: '*'
         state: latest
         update_only: true
 
-    - name: (tasks/main.yml) - Install Python3, pip, and git --> in {{ envirionment }}
+    - name: Install Python3, pip, and git --> (tasks/main.yml in {{ envirionment }})
       ansible.builtin.dnf:
         name:
           - python3
@@ -15,13 +15,13 @@
           - git
         state: present
 
-    - name: (tasks/main.yml) - Install Python modules --> in {{ envirionment }}
+    - name: Install Python modules --> (tasks/main.yml in {{ envirionment }})
       ansible.builtin.pip:
         name:
           - flask
         executable: pip3
 
-    - name: (tasks/main.yml) - Clone GitHub repository --> in {{ envirionment }}
+    - name: Clone GitHub repository --> (tasks/main.yml in {{ envirionment }})
       ansible.builtin.git:
         repo: https://github.com/Daniel-Perrinez/Ansible_POC.git
         dest: /home/ec2-user/Ansible_POC
@@ -29,5 +29,5 @@
         clone: true
         update: true
 
-    - name: (tasks/main.yml) - Configure host --> in {{ envirionment }}
+    - name: Configure host --> (tasks/main.yml in {{ envirionment }})
       ansible.builtin.include_tasks: config_{{ envirionment }}.yml

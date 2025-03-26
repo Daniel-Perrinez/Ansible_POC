@@ -86,8 +86,6 @@ Step 1: Connect to AWS
     ```
 
 
-
-
 - 4. Advanced Flask Deployment
 Playbooks --> Roles --> Tasks
 https://docs.ansible.com/ansible/latest/playbook_guide/playbooks_reuse_roles.html
@@ -164,6 +162,8 @@ ansible-playbook -i inventory/inventory.yml 3rd-advanced_import_roles_playbook.y
 Live Demo:
 ```
 cd /Users/danielperrinez/Desktop/WEI/Presentations/DevOps-for-SysOps/Part 3 - Ansible/Ansible_POC/AWS_Intro_to_Ansible/3-Advanced/Ansible
+
+aws sso login --profile Daniel-Perrinez-Sandbox
 ```
 <!-- Update and deploy dev app -->
 update: 
@@ -191,4 +191,9 @@ git add .
 git commit -a -m "updated prod site"
 git push origin main
 ansible-playbook -i inventories/production/aws_ec2.yml --extra-vars "@inventories/production/host_vars/prod.yml" 3rd-advanced_roles_playbook.yml
+```
+
+troubleshooting:
+```
+ssh -i creds/id_rsa ec2-user@ec2-3-227-240-148.compute-1.amazonaws.com
 ```
