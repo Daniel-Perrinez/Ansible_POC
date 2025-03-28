@@ -190,7 +190,12 @@ ansible-inventory -i inventories/production/aws_ec2.yml --graph
 git add .
 git commit -a -m "updated prod site"
 git push origin main
-ansible-playbook -i inventories/production/aws_ec2.yml --extra-vars "@inventories/production/host_vars/prod.yml" 3rd-advanced_roles_playbook.yml
+
+
+ansible-playbook 3rd-advanced_roles_playbook.yml \
+    -i inventories/production/aws_ec2.yml \
+    --extra-vars "@inventories/production/host_vars/prod.yml" 
+
 ```
 
 troubleshooting:
