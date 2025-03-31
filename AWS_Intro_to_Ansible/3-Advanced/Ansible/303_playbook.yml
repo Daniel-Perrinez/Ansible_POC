@@ -1,5 +1,5 @@
 ---
-- name: Deploy Flask app --> (./3rd-advanced_roles_playbook.yml in {{ envirionment }})
+- name: Deploy Flask app --> (./303_playbook.yml in {{ envirionment }})
   hosts: "{{ envirionment }}"
   become: true
   remote_user: "{{ ansible_user }}"
