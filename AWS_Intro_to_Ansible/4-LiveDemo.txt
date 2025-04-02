@@ -1,6 +1,6 @@
 Live Demo:
 ```
-cd /Users/danielperrinez/Desktop/WEI/Presentations/DevOps-for-SysOps/Part 3 - Ansible/Ansible_POC/AWS_Intro_to_Ansible/3-Advanced/Ansible
+cd /Users/danielperrinez/Desktop/WEI/Presentations/DevOps-for-SysOps/Part\ 3\ -\ Ansible/Ansible_POC/AWS_Intro_to_Ansible/3-Advanced/Ansible
 
 aws sso login --profile Daniel-Perrinez-Sandbox
 ```
@@ -15,8 +15,11 @@ ansible-inventory -i inventories/development/aws_ec2.yml --graph
 git add .
 git commit -a -m "updated dev site"
 git push origin main
-ansible-playbook -i inventories/development/aws_ec2.yml --extra-vars "@inventories/development/host_vars/dev.yml" 3rd-advanced_roles_playbook.yml
+ansible-playbook 303_playbook.yml -i inventories/development/aws_ec2.yml --extra-vars "@inventories/development/vars/dev.yml"
 ```
+
+# ------------------------------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------------------------------
 
 <!-- Update and deploy prod app -->
 update: 
@@ -31,13 +34,20 @@ git commit -a -m "updated prod site"
 git push origin main
 
 
-ansible-playbook 3rd-advanced_roles_playbook.yml \
+ansible-playbook 303_playbook.yml \
     -i inventories/production/aws_ec2.yml \
-    --extra-vars "@inventories/production/host_vars/prod.yml" 
+    --extra-vars "@inventories/production/vars/prod.yml" 
 
 ```
 
+
+# ------------------------------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------------------------------
 troubleshooting:
 ```
+Dev:
 ssh -i creds/id_rsa ec2-user@ec2-3-227-240-148.compute-1.amazonaws.com
+
+Prod:
+ssh -i creds/id_rsa ec2-3-227-240-148.compute-1.amazonaws.com
 ```
